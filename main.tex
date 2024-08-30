@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+\usepackage[english]{babel}
+\selectlanguage{english}
+
+\usepackage{acronym}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage{fancybox}
+\usepackage{fancyhdr}						
+\usepackage[outer=3.15cm]{geometry}
+\geometry{a4paper,body={5.8in,9in}}
+
+\usepackage{graphicx}
+\usepackage{longtable}						
+\usepackage{listings}
+\usepackage{multicol}						
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage[hang]{subfigure}
+\usepackage{tabularx}
+\usepackage{url,xspace,boxedminipage}
+
+\pagestyle{fancy} 								
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\renewcommand{\bottomfraction}{0.5}		  %Standard: 0.3
+\renewcommand{\textfraction}{0.1}		  	%Standard: 0.2
+\renewcommand{\floatpagefraction}{0.8} 	%Standard: 0.5
+\renewcommand{\arraystretch}{1.2}
+\setlength{\parindent}{0pt} % Meine Formatierung
+\setlength{\parskip}{0.5em}   % Meine Formatierung
+
+
+\newcommand{\modd}{\text{ mod }}
+\newcommand{\RS}{\mathbb{R}}
+\newcommand{\NS}{\mathbb{N}}
+\newcommand{\ZS}{\mathbb{Z}}
+\newcommand{\dnormal}{\mathit{N}}
+\newcommand{\duniform}{\mathit{U}}
+\newcommand{\dsum}{\displaystyle\sum}
+
+\newcommand{\erdos}{Erd\H{o}s}
+\newcommand{\renyi}{-R\'{e}nyi}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\drv}[1]{\frac{\partial}{\partial #1}}
+
+\newcommand{\vct}[1]{
+\begin{pmatrix}
+#1
+\end{pmatrix}
+}
+
+\begin{document}
+\renewcommand{\headheight}{-50pt}
+\newcommand{\xmin}{\displaystyle\min\limits_}
+\newcommand{\N}{\textit{N}}
+\newcommand{\bx}{\textbf}
+
+
+\fancyhead{}
+\fancyhead[CO]{\trtitle}
+
+\thispagestyle{empty}
+\pagenumbering{arabic}
+
+\title{Machine Learning Notes}
+\date{}
+\maketitle
+
+\input{content}
+
+\end{document}
