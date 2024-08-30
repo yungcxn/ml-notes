@@ -1,3 +1,43 @@
 \section{Introduction}
 
 ML: Tries to automate the process of \bx{inductive inference}.
+
+\be
+\i Deduction: Learning from rules
+\i Induction: Learning from examples
+\ee
+
+\npsection{Supervised learning}
+
+\bi
+\i input $X$, output $Y$
+\i training data: $(x^{(i)}, y^{(i)})_{i=1..n} \subset X \times Y$
+\i Goal: learn $f: X \to Y$ for model class $F$ on examples
+\ei
+
+\subsection{Least squares regression}
+$\tilde X, \tilde w$ are extended with bias:
+\begin{align*}
+\min_{\tilde w} \frac{1}{2} \norm{\tilde X \tilde w - y}^2 \Rightarrow \min_w \frac{1}{2} \norm{Xw-y}^2
+\end{align*}
+Solve with gradient and set to zero:
+\begin{align*}
+\nabla L = X^T(Xw-y) = 0 \Rightarrow (X^TX)w = X^Ty \Rightarrow w = (X^TX)^{-1}X^Ty
+\end{align*}
+
+\subsection{Gradient descent}
+Alternative to least squares regression. Algorithm:
+\be
+\i Compute gradient $\nabla L(w) = X^T(Xw-y)$
+\i Negative gradient shows to steepest descent
+\i $w^{(t+1)} = w^{(t)} - \gamma^{(t)} \cdot \nabla L(w^{(t)})$
+\ee
+
+\subsection{Derivative examples}
+
+\bi
+\i $L(w) = w_1^2 + w_2^2 \\\Rightarrow \nabla L(w) = \vct{2w_1\\2w_2}$
+\i $L(w) = \norm{w} ^2_2 = w^Tw \\\Rightarrow \nabla L(w) = 2w$
+\i $L(w) = w^TAw \\\Rightarrow \nabla L(w) = Aw + A^Tw$
+\i $L(w) = \norm{Xw-y}^2 = w^TX^TXw - y^TXw - w^TX^Ty + y^Ty \\\Rightarrow \nabla L(w) = 2X^T(Xw - y)$
+\ei

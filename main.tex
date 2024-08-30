@@ -27,15 +27,16 @@
 \usepackage[hang]{subfigure}
 \usepackage{tabularx}
 \usepackage{url,xspace,boxedminipage}
+\usepackage{titlesec}
+\newcommand{\npsection}{\clearpage\section}
+
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\renewcommand{\i}{\item}
 
 \pagestyle{fancy} 								
-\setcounter{topnumber}{3}
-\setcounter{bottomnumber}{2}
-\setcounter{totalnumber}{4}
-\renewcommand{\bottomfraction}{0.5}		  %Standard: 0.3
-\renewcommand{\textfraction}{0.1}		  	%Standard: 0.2
-\renewcommand{\floatpagefraction}{0.8} 	%Standard: 0.5
-\renewcommand{\arraystretch}{1.2}
 \setlength{\parindent}{0pt} % Meine Formatierung
 \setlength{\parskip}{0.5em}   % Meine Formatierung
 
@@ -61,19 +62,15 @@
 }
 
 \begin{document}
-\renewcommand{\headheight}{-50pt}
 \newcommand{\xmin}{\displaystyle\min\limits_}
 \newcommand{\N}{\textit{N}}
 \newcommand{\bx}{\textbf}
-
-
-\fancyhead{}
-\fancyhead[CO]{\trtitle}
 
 \thispagestyle{empty}
 \pagenumbering{arabic}
 
 \title{Machine Learning Notes}
+\author{(c) yungcxn}
 \date{}
 \maketitle
 
