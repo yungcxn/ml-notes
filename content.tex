@@ -7,6 +7,29 @@ ML: Tries to automate the process of \bx{inductive inference}.
 \i Induction: Learning from examples
 \ee
 
+\subsection{Math}
+
+\TODO{norms}
+\TODO{determinant, trace, inverse}
+\TODO{eigenvalues + eigenvectors}
+\TODO{semidefinite, definite, indefinite}
+\TODO{linear eq}
+\TODO{inverse proof}
+
+\subsubsection{Matrix calculus}
+
+\newcommand{\dlw}[2]{\frac{\partial L_#1}{\partial w_#2}}
+\begin{align*}
+L(w): \RS \to \RS^m
+\Rightarrow  \nabla L(w) = \vct{\drv{w_1}L(w)\\\vdots\\\drv{w_n}L(w)}
+\Rightarrow \nabla L(w) = \left(\begin{array}{cccc}
+\dlw{1}{1} & \dlw{2}{1} & \ldots & \dlw{m}{1} \\
+\dlw{1}{2} & \dlw{2}{2} & \ldots & \dlw{m}{2} \\
+\vdots & \vdots & \ddots & \vdots \\
+\dlw{1}{d} & \dlw{2}{d} & \ldots & \dlw{m}{d}
+\end{array}\right)
+\end{align*}
+
 \npsection{Supervised learning}
 
 \bi
@@ -21,6 +44,17 @@ $\tilde X, \tilde w$ are extended with bias:
 \min_{\tilde w} \frac{1}{2} \norm{\tilde X \tilde w - y}^2 \Rightarrow \min_w \frac{1}{2} \norm{Xw-y}^2
 \end{align*}
 Solve with gradient and set to zero:
+\begin{align*}
+L &= \frac{1}{2} \dsum_{i=1}^n ((X_i^Tw_i)-y_i)^2 \\
+&= \frac{1}{2} \left(\dsum_{i=1}^n (X_i^Tw_i)^2 - 2(X_i^Tw_i)y_i + y_i^2 \right) \\
+\end{align*}
+\begin{align*}
+  \nabla L &= \drv{w} \left(  \frac{1}{2} \left(\dsum_{i=1}^n (X_i^Tw_i)^2 - 2(X_i^Tw_i)y_i + y_i^2 \right) \right)\\
+  &= \frac{1}{2} \left(\dsum_{i=1}^n 2(X_i^TX_iw_i) - 2(X_i^T)y_i \right)\\
+  &= \dsum_{i=1}^n X_i^TX_iw_i - X_i^Ty_i\\
+  &= X^TXw - X^Ty\\
+  &= X^T(Xw-y)
+\end{align*}
 \begin{align*}
 \nabla L = X^T(Xw-y) = 0 \Rightarrow (X^TX)w = X^Ty \Rightarrow w = (X^TX)^{-1}X^Ty
 \end{align*}
