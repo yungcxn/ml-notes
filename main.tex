@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage[english]{babel}
+\usepackage{mathptmx}
 \selectlanguage{english}
 
 \usepackage{acronym}
@@ -17,7 +18,7 @@
 \usepackage{fancyhdr}						
 \usepackage[outer=3.15cm]{geometry}
 \geometry{a4paper,body={5.8in,9in}}
-
+\usepackage{titling} % Add this line
 \usepackage{graphicx}
 \usepackage{longtable}						
 \usepackage{listings}
@@ -28,6 +29,7 @@
 \usepackage{tabularx}
 \usepackage{url,xspace,boxedminipage}
 \usepackage{titlesec}
+\setlength{\droptitle}{-3cm} 
 \newcommand{\npsection}{\clearpage\section}
 
 \newcommand{\be}{\begin{enumerate}}
@@ -70,10 +72,12 @@
 \thispagestyle{empty}
 \pagenumbering{arabic}
 
-\title{Machine Learning Notes}
-\author{(c) yungcxn}
+\title{--- Machine Learning Notes ---}
 \date{}
+\author{}
 \maketitle
+
+\tableofcontents
 
 \input{content}
 

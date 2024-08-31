@@ -1,4 +1,4 @@
-\section{Introduction}
+\npsection{Introduction}
 
 ML: Tries to automate the process of \bx{inductive inference}.
 
@@ -75,3 +75,11 @@ Alternative to least squares regression. Algorithm:
 \i $L(w) = w^TAw \\\Rightarrow \nabla L(w) = Aw + A^Tw$
 \i $L(w) = \norm{Xw-y}^2 = w^TX^TXw - y^TXw - w^TX^Ty + y^Ty \\\Rightarrow \nabla L(w) = 2X^T(Xw - y)$
 \ei
+
+\subsection{Convexity}
+
+Set $C$ convex if line between any two points of $C$ in $C$. $\forall x,y \in C$ and $\lambda \in \RS$ with $0 \leq \lambda \leq 1$: \[\lambda x + (1 - \lambda) y \in C\]
+
+Function $f: \RS^d \to \RS$ convex if $\dom(f)$ is a convex set and $\forall x,y \in \dom(f)$, $\lambda \in \RS$ with $0 \leq \lambda \leq 1$: \[f(\lambda x + (1 - \lambda) y) \leq \lambda f(x) + (1 - \lambda) f(y)\]
+
+Gradient descent returns global optimum for convex functions.
