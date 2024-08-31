@@ -11,12 +11,20 @@ ML: Tries to automate the process of \bx{inductive inference}.
 
 \TODO{norms}
 \TODO{determinant, trace, inverse}
-\TODO{eigenvalues + eigenvectors}
 \TODO{semidefinite, definite, indefinite}
 \TODO{linear eq}
 \TODO{inverse proof}
 
-\subsubsection{Matrix calculus}
+\subsubsection{Eigenvalues and Eigenvectors}
+
+Example: $f(w) = 0.5 w^TMw$
+\bi
+\i Hessian: $\nabla^2 f(w) = M = \vct{1 & 0 \\ 0 & 3}$
+\i Eigenvalues $1,3$
+\i Function along eigenvectors like $1x^2$ and $3x^2$
+\ei
+
+\subsubsection{Derivative and Hessian}
 
 \newcommand{\dlw}[2]{\frac{\partial L_#1}{\partial w_#2}}
 \begin{align*}
@@ -28,6 +36,18 @@ L(w): \RS \to \RS^m
 \vdots & \vdots & \ddots & \vdots \\
 \dlw{1}{d} & \dlw{2}{d} & \ldots & \dlw{m}{d}
 \end{array}\right)
+\end{align*}
+
+\newcommand{\dfdx}[2]{
+    \frac{\partial^2 f}{\partial x_{#1} \partial x_{#2}} (x)
+}
+\begin{align*}
+\nabla^2 f(x) =
+\vct{
+    \dfdx{1}{1} & \ldots & \dfdx{1}{d} \\
+    \vdots & \ddots & \vdots \\
+    \dfdx{d}{1} & \ldots & \dfdx{d}{d} 
+}, \qquad x = \vct{x_1\\\vdots\\x_d} \in \RS^d
 \end{align*}
 
 \npsection{Supervised learning}
@@ -83,3 +103,43 @@ Set $C$ convex if line between any two points of $C$ in $C$. $\forall x,y \in C$
 Function $f: \RS^d \to \RS$ convex if $\dom(f)$ is a convex set and $\forall x,y \in \dom(f)$, $\lambda \in \RS$ with $0 \leq \lambda \leq 1$: \[f(\lambda x + (1 - \lambda) y) \leq \lambda f(x) + (1 - \lambda) f(y)\]
 
 Gradient descent returns global optimum for convex functions.
+
+Optimization problem: $\min f(x), x \in X \subseteq \RS^d$ has local minimizer $x^* \in X$ if $\exists \epsilon > 0$ with:
+\[\forall y \in X \text{ with } \norm{x^* - y} \leq \epsilon: f(x^*) \leq f(y)\]
+Global minimizer if $f(x^*)$ is lowest of all optimizers.
+
+Symmetric matrix $A$ is positive semidefinite ($A \succcurlyeq 0$) if :
+\[x^TAx \geq 0, \forall x\]
+Positive definite ($A \succ 0$) if $\forall x \neq 0$
+
+Symmetric matrix $A$ is positive semidefinite iff all eigenvalues are $\geq 0$ and positive definite iff all $> 0$.
+
+If function is one-dimensional: Convex if $f''(x) \geq 0$.
+If multidimensional: Convex if 2nd derivative is psd.
+
+
+\subsection{Backtracking line search} % not needed in exam
+
+Algorithm:
+\be
+\i Input: $x, \Delta x, \alpha \in (0,0.5), \beta \in (0,1)$
+\i $t = 1$
+\i while $f(x + t \, \Delta x) > f(x) + \alpha \, t \, \nabla f(x)^T \, \Delta x$:
+\i \quad $t = \beta \, t$
+\ee
+
+\subsection{Solve LSR}
+
+\be
+\i $L(w) = \frac{1}{2} \norm{Xw-y}_2^2$
+\i $\nabla L(w) = X^T(Xw-y)$
+\i $\nabla L(w) = X^TX$ is symmetric and psd
+\ee
+
+\subsection{Subgradient method} % not needed in exam
+
+If function not differentiable, e.g. $\norm{w}_1$
+\bi
+\i gradient is subgradient (convex hull of gradients)
+\i choose constant step length
+\ei

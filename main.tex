@@ -32,10 +32,10 @@
 \setlength{\droptitle}{-3cm} 
 \newcommand{\npsection}{\clearpage\section}
 
-\newcommand{\be}{\begin{enumerate}}
-\newcommand{\ee}{\end{enumerate}}
-\newcommand{\bi}{\begin{itemize}}
-\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{samepage}\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}\end{samepage}}
+\newcommand{\bi}{\begin{samepage}\begin{itemize}}
+\newcommand{\ei}{\end{itemize}\end{samepage}}
 \renewcommand{\i}{\item}
 
 \pagestyle{fancy} 								
