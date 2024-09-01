@@ -29,6 +29,7 @@
 \usepackage{tabularx}
 \usepackage{url,xspace,boxedminipage}
 \usepackage{titlesec}
+\usepackage{titling}
 \setlength{\droptitle}{-3cm} 
 \newcommand{\npsection}{\clearpage\section}
 
@@ -38,7 +39,12 @@
 \newcommand{\ei}{\end{itemize}\end{samepage}}
 \renewcommand{\i}{\item}
 
-\pagestyle{fancy} 								
+\pagestyle{fancy} 					
+\fancyhf{} % Clear all header and footer fields
+\fancyhead[L]{\leftmark} % Section name on the left for odd pages
+\fancyhead[R]{\rightmark} % Subsection name on the right for even pages
+\fancyfoot[C]{\thepage} % Page number in center of footer
+
 \setlength{\parindent}{0pt} % Meine Formatierung
 \setlength{\parskip}{0.5em}   % Meine Formatierung
 
@@ -51,6 +57,7 @@
 \newcommand{\dnormal}{\mathit{N}}
 \newcommand{\duniform}{\mathit{U}}
 \newcommand{\dsum}{\displaystyle\sum}
+\newcommand{\dprod}{\displaystyle\prod}
 
 \newcommand{\erdos}{Erd\H{o}s}
 \newcommand{\renyi}{-R\'{e}nyi}
@@ -68,10 +75,13 @@
 \newcommand{\xmin}{\displaystyle\min\limits_}
 \newcommand{\N}{\textit{N}}
 \newcommand{\bx}{\textbf}
+\newcommand{\dsumn}[1]{\dsum^n_{{#1}=1}}
+\newcommand{\dsumni}{\dsumn{i}}
+
 
 \thispagestyle{empty}
 \pagenumbering{arabic}
-
+\begin{titlingpage}
 \title{--- Machine Learning Notes ---}
 \date{}
 \author{}
@@ -79,6 +89,9 @@
 
 \tableofcontents
 
+\end{titlingpage}
+
+\setcounter{page}{1}
 \input{content}
 
 \end{document}

@@ -29,7 +29,7 @@ Example: $f(w) = 0.5 w^TMw$
 \newcommand{\dlw}[2]{\frac{\partial L_#1}{\partial w_#2}}
 \begin{align*}
 L(w): \RS \to \RS^m
-\Rightarrow  \nabla L(w) = \vct{\drv{w_1}L(w)\\\vdots\\\drv{w_n}L(w)}
+\Rightarrow  \nabla L(w) = \vct{\drv{w_1}L(w)\\\drv{w_2}L(w)\\\vdots\\\drv{w_n}L(w)}
 \Rightarrow \nabla L(w) = \left(\begin{array}{cccc}
 \dlw{1}{1} & \dlw{2}{1} & \ldots & \dlw{m}{1} \\
 \dlw{1}{2} & \dlw{2}{2} & \ldots & \dlw{m}{2} \\
@@ -49,6 +49,11 @@ L(w): \RS \to \RS^m
     \dfdx{d}{1} & \ldots & \dfdx{d}{d} 
 }, \qquad x = \vct{x_1\\\vdots\\x_d} \in \RS^d
 \end{align*}
+
+\subsubsection{Bonus}
+
+Convex hull $\conv(V)$ for set of vectors $V$ is smallest convex set containing $V$.
+\[ \conv(V) = \left\{\dsum^m_{i=1} \lambda_i \cdot v_i \mid \lambda_i \geq 0, \dsum^m_{i=1} \lambda_i = 1\right\} \]
 
 \npsection{Supervised learning}
 
@@ -87,7 +92,7 @@ Alternative to least squares regression. Algorithm:
 \i $w^{(t+1)} = w^{(t)} - \gamma^{(t)} \cdot \nabla L(w^{(t)})$
 \ee
 
-\subsection{Derivative examples}
+\subsubsection{Derivative examples}
 
 \bi
 \i $L(w) = w_1^2 + w_2^2 \\\Rightarrow \nabla L(w) = \vct{2w_1\\2w_2}$
@@ -96,7 +101,7 @@ Alternative to least squares regression. Algorithm:
 \i $L(w) = \norm{Xw-y}^2 = w^TX^TXw - y^TXw - w^TX^Ty + y^Ty \\\Rightarrow \nabla L(w) = 2X^T(Xw - y)$
 \ei
 
-\subsection{Convexity}
+\subsubsection{Convexity}
 
 Set $C$ convex if line between any two points of $C$ in $C$. $\forall x,y \in C$ and $\lambda \in \RS$ with $0 \leq \lambda \leq 1$: \[\lambda x + (1 - \lambda) y \in C\]
 
@@ -118,7 +123,7 @@ If function is one-dimensional: Convex if $f''(x) \geq 0$.
 If multidimensional: Convex if 2nd derivative is psd.
 
 
-\subsection{Backtracking line search} % not needed in exam
+\subsubsection{Backtracking line search} % not needed in exam
 
 Algorithm:
 \be
@@ -128,7 +133,7 @@ Algorithm:
 \i \quad $t = \beta \, t$
 \ee
 
-\subsection{Solve LSR}
+\subsubsection{Solve LSR}
 
 \be
 \i $L(w) = \frac{1}{2} \norm{Xw-y}_2^2$
@@ -136,10 +141,156 @@ Algorithm:
 \i $\nabla L(w) = X^TX$ is symmetric and psd
 \ee
 
-\subsection{Subgradient method} % not needed in exam
+\subsubsection{Subgradient method} % not needed in exam
 
 If function not differentiable, e.g. $\norm{w}_1$
 \bi
 \i gradient is subgradient (convex hull of gradients)
-\i choose constant step length
+\i choose constant step length $g$
+\i $w^{(t+1)} = w^{(t)} - \gamma^{(t)} \cdot g$ with $\gamma^{(t)} = \frac{1}{\sqrt{t}}$
+\i find $g \in \RS^d$ at $x \in \dom(f)$ with: \[f(y) \geq f(x) + g^T(y-x), \forall y \in \dom(f)\]
 \ei
+
+\subsection{Polynomial Regression}
+
+\bi
+\i $X \in RS, Y \in RS$
+\i $f(x) = w_dx^d + w_{d-1}x^{d-1} + \ldots + w_1x^1 + w_0$
+\i find best $w = (w_d, \ldots, w_0) \in \RS^{d+1}$
+\i loss function is squared loss: $l(y, \hat y) = \frac{1}{2}(y - \hat y)^2$
+\ei
+
+\begin{samepage}
+With $\hat y = f(x^{(i)}) = \dsum^d_{j=0}w_j (x^{(i)})^j = (\tilde x ^{(i)})^T w$ rewrite as:
+\begin{align*}
+  w^* &= \min_w \dsum^n_{i=1}\frac{1}{2}(y^{(i)} - \hat y^{(i)})^2\\
+  &= \min_w \dsum^n_{i=1}\frac{1}{2}(y^{(i)} - (\tilde x ^{(i)})^T w)^2 \text{\qquad\qquad (LSR)}
+\end{align*}
+\end{samepage}
+
+Solve $\norm{Xw-y}^2$ with Basis functions:
+\[
+X = \vct{f_1(x^{(1)}) & f_2(x^{(1)}) & \ldots & f_m(x^{(1)})\\
+f_1(x^{(2)}) & f_2(x^{(2)}) & \ldots & f_m(x^{(2)})\\
+\vdots & \vdots & \ddots & \vdots\\
+f_1(x^{(n)}) & f_2(x^{(n)}) & \ldots & f_m(x^{(n)})} \qquad y = \vct{y^{(1)}\\y^{(2)}\\\vdots\\y^{(n)}}
+\]
+
+\subsection{Underfitting / Overfitting}
+
+\bx{Underfitting}: Model too simple, degree low
+
+\bx{Overfitting}: Model too complex, degree high
+
+Too high model complexity $\to$ Higher training error
+
+Lower polynomial degree or basis functions $\to$ Lower model complexity
+
+\subsubsection{k-fold Cross Validation}
+
+Mitigate Overfitting: Split training data into $k$ (usually $10$) and pick one for \bx{validation data}.
+
+Train model on one training block, run on validation data and compute error. Repeat for all blocks and average.
+
+\subsubsection{Regularization}
+
+Constrain magnitude ($\norm{w}_2, \norm{w}_1$, etc.)
+
+Lagrangian to remove constraint
+
+\[
+\begin{array}{ll}
+  \min_w & L(w) \\
+  st & \norm{w}_2^2 \leq t
+\end{array} \qquad \to \qquad \min_w \quad L(w) + \frac{\lambda}{2} \norm{w}_2^2
+\]
+
+if $L(w) = \frac{1}{n} \dsumni l(y^{(i)}, \hat y^{(i)})$:
+\be
+\i Empirical risk minimization (ERM): \qquad $\min_w L(w)$
+\i Regularized risk minimization (RRM): \quad $\min_w L(w) + \norm{w}$
+\ee
+
+\subsubsection{Bias-Variance Tradeoff}
+
+Prediction error is sum of variance and bias
+
+\bi
+\i Variance spreads predictions around true value
+\i Bias puts predictions away from true value
+\ei
+
+With complexer model:
+\be
+\i Test data has min somewhere
+\i Bias gets lower
+\i Variance gets higher
+\ee
+
+\subsubsection{Regularizers}
+
+Ridge Regression: LSR with $\norm{w}_2$-regularizer:
+\[
+\min_w \frac{1}{2n} \norm{Xw-y}_2^2 + \frac{\lambda}{2} \norm{w}_2^2
+\]
+
+Least absolute shrinkage and selection operator (LASSO): $\norm{w}_1$-regularizer:
+\[
+\min_w \frac{1}{2n} \norm{Xw-y}_2^2 + \lambda \norm{w}_1
+\]
+Solved with subgrad method, performs feature selection.
+
+Elastic Net: Combination of both
+\[
+\min_w \frac{1}{2n} \norm{Xw-y}^2_2 + \lambda \left( \alpha \, \norm{w}_1 + \frac{1-\alpha}{2}\, \norm{w}_2^2\right)
+\]
+Often used for gene expression data.
+
+Robust Regression with $\norm{w}_1$-regularizer:
+\[
+\min_w \frac{1}{n} \norm{Xw-y}_1
+\]
+Solved with subgrad method. Often used with Huber Loss for faster, simpler optimization.
+
+\subsection{Feature Scaling}
+
+\bi
+\i Features should be $[0,1]$ or $[-1,1]$
+\i Regularizer not invariant to scaling
+\i also on test data!
+\ei
+
+\newcommand{\centered}{\text{centered}}
+\newcommand{\scaled}{\text{scaled}}
+Normalize data: Center and scale each feature of data matrix $X_{i,j} = (x_j^{(i)})$
+\[
+X_{:,j}^{\centered} = X_{:,j} - \overline x_j = X_{:,j} - \frac{1}{n} \dsumni x_j^{(i)}
+\]
+\[
+X_{:,j}^{\scaled} = \frac{X_{:,j}^{\centered}}{\norm{X_{:,j}^{\centered}}_2}
+\]
+
+\subsubsection{MLE and MAP}
+
+Example: For Coin-throw with $p(\text{head}}) = \theta$: 3 heads, 7 tails.
+What is most likely $\theta$? \[
+p(y^{(1)}, y^{(2)}, \ldots, y^{(n)} \mid \theta ) = \dprod_i p(y^{(i)} \mid \theta) = \theta^3 (1-\theta)^7
+\]
+
+Maximum Likelihood Estimator (MLE): Find $\theta$ for max probability: \[
+\max_{\theta} \theta^3 (1-\theta)^7
+\]
+
+\newcommand{\observation}{\text{observation}}
+Maximum A Posteriori (MAP): Find $\theta$ for max probability with prior: \[
+\max_{\theta} \theta^3 (1-\theta)^7 \cdot p(\theta \mid \observation)
+\]
+with $p(\theta \mid \observation ) = \frac{p(\observation \mid \theta) \cdot p(\theta)}{p(\observation)}$
+
+
+%\[
+%\begin{array}{ll}
+%\min_w \frac{1}{2} \norm{Xw-y}_2^2 + \lambda \norm{w}_2^2 & \text{Ridge regression}\\\\
+%\min_w \frac{1}{2} \norm{Xw-y}_2^2 + \lambda \norm{w}_1 & \text{Lasso regression}
+%\end{array}
+%\]
