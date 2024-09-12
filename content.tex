@@ -509,6 +509,49 @@ p(w_i \mid x) = \frac{\text{frequency of $w_i$} +1 }{\text{words in $x$} + \text
 \i Generative: Learn $p(y \mid x) \cdot p(x) = p(x, y)$ joint probability
 \ei
 
+\subsubsection{Discriminant Analysis}
+
+\subsubsection{Gaussian Discriminant Analysis}
+
+\bi
+\i generate new data, also for classification
+\i $\mu = \frac{1}{n} \dsum_i x^{(i)}$
+\i $\Sigma = \frac{1}{n} \dsum_i (x^{(i)} - \mu) (x^{(i)} - \mu)^T$
+\i for each class, get $\mu_c$ and $\Sigma_c$
+\i estimate $p(x,y) = p(x \mid y) \cdot p(y)$ with $p(y=c) = \frac{n_c}{n}$ where $n_c$ is number of data points in class $c$ and $N$ is total amount of data points
+\i this becomes $x^T \Sigma x + v^Tx + t=0$
+\i Boundary is quadratic
+\i number of parameters to be estimated: $2 \frac{d(d+1)}{2} + 2d$
+(much higher than for discriminative models)
+\ei
+
+\subsubsection{Linear Discriminant Analysis}
+
+\bi
+\i Assume $\Sigma = \Sigma_{-1} = \Sigma_{+1}$ for all classes
+\i number of parameters to be estimated: $\frac{d(d+1)}{2} + 2d$
+\ei
+
+\section{Supervised learning}
+
+\bi
+\i predict label for $(x^{(i)})_i$
+\i find structure, possibly assign labels
+\i can generate new data
+\ei
+
+\subsection{k-means Objective}
+
+\bi
+\i for $x^{(i)} \in \RS^d$ assume given data points $(x^{(i)})^n_{i=1}$
+\i group into clusters $C = \{C_1, C_2, \ldots, C_k\}$
+\i construct class $k$ class centers $\mu_i$ representing groups
+\i Find centers such that sum of squared distances of data points to closest center is minimized: \[
+\min_{\mu_1, \ldots, \mu_k \in \RS^d, C} \dsum_{j=1}^k \dsum_{x^{(i)} \in C_j} \norm{x^{(i)} - \mu_j}^2
+\]
+\i non-convex min. problem
+\ei
+
 %\[
 %\begin{array}{ll}
 %\min_w \frac{1}{2} \norm{Xw-y}_2^2 + \lambda \norm{w}_2^2 & \text{Ridge regression}\\\\
