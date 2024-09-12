@@ -154,7 +154,7 @@ If function not differentiable, e.g. $\norm{w}_1$
 \subsection{Polynomial Regression}
 
 \bi
-\i $X \in RS, Y \in RS$
+\i $X \in \RS, Y \in \RS$
 \i $f(x) = w_dx^d + w_{d-1}x^{d-1} + \ldots + w_1x^1 + w_0$
 \i find best $w = (w_d, \ldots, w_0) \in \RS^{d+1}$
 \i loss function is squared loss: $l(y, \hat y) = \frac{1}{2}(y - \hat y)^2$
@@ -287,6 +287,16 @@ Maximum A Posteriori (MAP): Find $\theta$ for max probability with prior: \[
 \]
 with $p(\theta \mid \observation ) = \frac{p(\observation \mid \theta) \cdot p(\theta)}{p(\observation)}$
 
+Here, we maximize the product of the likelihood times the prior:
+\[
+\argmax_w p(w \mid X,y) = \argmax_w p(y \mid X,w) \cdot p(w)
+\]
+Which is the same as minimising the loss and the regularizer:
+\[
+\argmin_w \dsumni (y^{(i)} - (x^{(i)})^T w)^2}+ \lambda \norm{w}_2^2
+\]
+prior (variance) is regularizer.
+
 \newline\newline
 % create table ERM vs MLE
 \begin{center}
@@ -300,6 +310,204 @@ $l_1$-loss & Gaussian Distribution\\
 $l_2$-loss & Laplacian Distribution
 \end{tabular}
 \end{center}
+Logarithmic equivalence
+
+\subsection{Binary Classification}
+
+\bi
+\i $X = \RS^d$
+\i $Y = \{-1,1\}$
+\i training data $(x^{(i)}, y^{(i)})_{i=1..n}$
+\i learn $f: X \to Y$
+\i linear function (hyperplane in multidimensional space) $f(x) = x^Tw + b = 0$ returning $\sign(f(x))$
+\ei
+
+Loss functions:
+\be
+\i Logistic function
+\bi 
+\i penalizes points on correct side
+\i close to decision boundary
+\i asymptotical linear growth
+\i MLE applied to logistic function $\log (1 + \exp(-t))$ is logistic regression
+\i Logistic regression: $f(x) = \log(1 + \exp(-y \cdot (x^Tw + b)))$ 
+\ei
+\i Hinge loss: $f(x) = \max(0, 1 - t)$
+\i Squared hinge loss: $f(x) = \max(0, 1 - t)^2$
+\ee
+
+\subsubsection{Support Vector Machine (SVM)}
+
+Pick hyperplane with largest margin between classes.
+
+\be
+\i Hard margin SVM: No misclassified data points \[
+\begin{array}{ll}
+\min_{w \in \RS^d,b \in \RS} & \frac{1}{2} \norm{w}_2^2 \\
+st & y^{(i)} \cdot (x^{(i)T}w + b) \geq 1
+\end{array}
+\]
+\i Soft margin SVM: Allow errors \[
+\begin{array}{ll}
+\min_{w \in \RS^d,b \in \RS, \xi \in \RS^n} & \frac{1}{2} \norm{w}_2^2 + \frac{C}{n} \dsumni \xi_i \\
+st & y^{(i)} \cdot ((x^{(i)}^T)w + b) \geq 1 - \xi_i \qquad , \xi_i \geq 0
+\end{array}
+\]
+This would be with e.g. the hinge loss (minimize regularizer + empirical risk $\to$ RRM):
+\[
+\min_{w \in \RS^d,b \in \RS} \frac{1}{2} \norm{w}_2^2 + \frac{C}{n} \dsumni \max(0, 1 - y^{(i)} \cdot (x^{(i)T}w + b))
+\]
+\ee
+
+Duality: If Primal problem convex and some conditions satisfied, optimal solution is equal to dual problem's solution (Strong duality).
+
+In dual problems we only need scalar products of data points.
+
+\be
+\setcounter{enumi}{2}
+\i Dual SVM: \[
+\begin{array}{ll}
+\max_{\alpha \in \RS^n} & \dsumni \alpha_i - \dsumni \dsumnj \alpha_i \alpha_j y^{(i)} y^{(j)} (x^{(i)})^T x^{(j)} \\
+st & \dsumni \alpha_i y^{(i)} = 0 \\
+& 0 \leq \alpha_i \leq \frac{C}{n}
+\end{array}
+\]
+Used when many dimensions and hyperplane separator not linear and kernels are used.
+\ee
+
+\subsubsection{Kernels}
+
+\bi
+\i $x \in \RS^d$
+\i map to $R^m$ using non-linear feature map $\phi$
+\i Use linear SVM in $R^m$
+\i never compute $\phi(x)$, only scalar products
+\i use kernel function $k(x^{(i)}, x^{(j)})$
+\ei
+
+
+$k(a,b)$ is a kernel function... 
+\bi 
+\i If $\phi$ exists for $k(a,b) = \phi(a)\phi(b)$ for $a,b \in \RS$
+\i If $\phi$ exists for $K = \phi(X)\phi(X)^T$ with data matrix $X$
+\i Iff K is positive semidefinite ($K \succcurlyeq 0$) for any $n$ input points 
+\bi
+\i Sometimes $\phi$ maps to $\RS^\infty$ (Reproducing Kernel Hilbert Space)
+\ei
+\ei
+
+Examples
+\bi
+\i Linear kernel for $k: \RS^d \times \RS^d \to \RS$ \[k(x^{(i)}, x^{(j)}) = (x^{(i)})^T x^{(j)}\]
+\i Cosine kernel: Assume data have all norm 1: $\norm{x^{(i)}}_2 = 1$, angle measures similarity
+\[
+\cos(x^{(i)}, x^{(j)}) = \frac{(x^{(i)})^T x^{(j)}}{\norm{x^{(i)}} \norm{x^{(j)}}} = (x^{(i)})^T x^{(j)}
+\]
+\i Gaussian kernel (Radial basis function) \[
+k(x^{(i)}, x^{(j)}) = \exp\left(-\frac{\norm{x^{(i)} - x^{(j)}}_2^2}{2\sigma^2}\right)
+\]
+maps to infinite dimensions
+\i Polynomial Kernel for $c > 0$ and $s \in \NS$:
+\[
+k(x^{(i)}, x^{(j)}) = (x^{(i)})^T x^{(j)} + c)^s
+\]
+\i Sum and positive scalar product of kernels are kernels
+\ei
+\newpage
+Kernel for Regularized Risk Minimization if norm from 2:
+\bi
+\i $\min_w L(w,X,y) + \lambda R(w)$
+\i iff $R = h(\norm{w}_2)$ for non-decreasing $h$, then $w^* = \dsum_i \beta_i \phi(x^{(i)})$
+\i LSR: $\min_w \norm{Xw-y}^2_2 \Rightarrow \min_\beta \norm{K\beta - y}^2_2$ 
+\i Ridge Regression: $\min_w \norm{Xw-y}^2_2 + \lambda \norm{w}_2^2 \Rightarrow \min_\beta \norm{K\beta - y}^2_2 + \lambda \beta^T K \beta$
+\i Regularized Logistic Regression, etc.
+\ei
+
+\subsection{Parametric vs Nonparametric Models}
+
+\bi
+\i Parametric if model depends on fixed number of parameters
+\i Nonparametric e.g. SVM with Gaussian kernel
+\ei
+
+\subsection{Multiclass Classification}
+
+\bi
+\i One-vs-Rest: Train binary classifier for each class-pair, predict highest score class
+\i One-vs-One: Train binary classifier for each class-pair, predict class with most votes
+\i Direct methods: e.g. K-nearest neighbor 
+\ei 
+
+\subsubsection{K-nearest neighbor}
+
+\bi
+\i Find $k$ nearest neighbors in training data
+\i Predict class with most votes
+\i Choose $k$ with cross-validation
+\i Small k $\to$ overfitting, large k $\to$ underfitting
+\i Advantage: Easy, simple, no training phase, non-parametric
+\i Disadvantage: Computationally expensive, sensitive to Noise
+\ei
+
+Regression: Compute average of $k$ nearest neighbors \[y = \frac{1}{k} \dsum_{i \in S} y^{(i)}\] or weighted \[y = \frac{1}{k} \dsum_{i \in S} \frac{1}{\norm{x-x^{(i)}}} \cdot y^{(i)}\]
+
+\subsubsection{Naive Bayes}
+
+\bi
+\i Probabilistic ML algorithm
+\i Assume features are conditionally independent
+\i Compute $p(y \mid x) = \frac{p(x \mid y) \cdot p(y)}{p(x)}$
+\i $p(y \mid x)$ is event $y$ in class $x$
+\i Bayesian theorem: $p(y \mid x) = \frac{p(x \mid y) \cdot p(y)}{p(x)}$
+\i Laplacian Smoothing for zero values: e.g. with words $w_i$ of class $x$ \[
+p(w_i \mid x) = \frac{\text{frequency of $w_i$} +1 }{\text{words in $x$} + \text{total unique words}}
+\]
+\ei
+
+\subsubsection{Decision Trees}
+
+\bi
+\i $X = \RS^d$
+\i $Y = {1,2,...,m}$
+\i Recursive partitioning of data
+\i Split data into subsets
+\i Choose feature and threshold to split (entropy, gini index)
+\i Repeat until stopping criterion
+\i Predict class with majority vote
+\i Advantage:
+\i Disadvantage: Overfitting, sensitive to noise
+\ei
+
+\subsubsection{Ensemble Learning}
+
+\bi
+\i Combine multiple models to improve performance
+\i Bagging: Train multiple models on random subsets of data, smaller variance
+\i Bootstrapping: Randomly sample data with replacement
+\i Boosting: Train multiple models sequentially, each model corrects previous model
+\ei
+
+\subsubsubsection{Random Forest}
+
+\bi
+\i Bagging with decision trees
+\i Each decision tree trained on random bootstrap subset of size $m$ of data of size $n$
+\i Construct decision tree $T_b$:
+\bi
+\i For each node that contains more than $n_{min}$ data points:
+\i Randomly select $p$ of $d$ features
+\i Split node with best feature and threshold
+\i Repeat until all nodes smaller
+\ei
+\i Output: Random decision trees $T_1, T_2, \ldots, T_B$
+\ei
+
+\subsection{Generative Models}
+
+\bi
+\i Discrimative: Learn $p(y \mid x)$
+\i Generative: Learn $p(y \mid x) \cdot p(x) = p(x, y)$ joint probability
+\ei
 
 %\[
 %\begin{array}{ll}
