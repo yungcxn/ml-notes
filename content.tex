@@ -287,6 +287,19 @@ Maximum A Posteriori (MAP): Find $\theta$ for max probability with prior: \[
 \]
 with $p(\theta \mid \observation ) = \frac{p(\observation \mid \theta) \cdot p(\theta)}{p(\observation)}$
 
+\newline\newline
+% create table ERM vs MLE
+\begin{center}
+\begin{tabular}{l|l}
+Empirical risk min. & Maximum likelihood \\
+\hline
+Minimize & Maximize \\
+Sum & Product \\
+Risk / Loss function & Noise Distribution \\
+$l_1$-loss & Gaussian Distribution\\
+$l_2$-loss & Laplacian Distribution
+\end{tabular}
+\end{center}
 
 %\[
 %\begin{array}{ll}
