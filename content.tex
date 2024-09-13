@@ -84,6 +84,27 @@ L &= \frac{1}{2} \dsum_{i=1}^n ((X_i^Tw_i)-y_i)^2 \\
 \nabla L = X^T(Xw-y) = 0 \Rightarrow (X^TX)w = X^Ty \Rightarrow w = (X^TX)^{-1}X^Ty
 \end{align*}
 
+
+\subsection{Error types}
+
+\bi
+\i real value $y^{(i)}$, predicted value $\hat y^{(i)}$
+\i Mean squared error is average error, applied to any regression model: \[\frac{1}{n} \dsum_{i=1}^n (y^{(i)} - \hat y^{(i)})^2\]
+\i Mean absolute error is average absolute error: \[\frac{1}{n} \dsum_{i=1}^n \left|y^{(i)} - \hat y^{(i)}\right|\]
+\i Root mean squared error: \[\sqrt{\frac{1}{n} \dsum_{i=1}^n (y^{(i)} - \hat y^{(i)})^2}\]
+\ei
+
+\subsection{Precision, Recall, etc.}
+
+\bi
+\i Precision: $\frac{TP}{TP + FP}$, how many of predicted positive are actually positive
+\i Recall (true positive rate, sensitivity): $\frac{TP}{TP + FN}$, how many of actual positive are predicted positive
+\i TN rate (specificity): $\frac{TN}{TN + FP}$, how many of actual negative are predicted negative
+\i Accuracy (ACC): $\frac{TP + TN}{TP + TN + FP + FN}$
+\i Balanced accuracy: $\frac{1}{2} \left( \frac{TP}{TP + FN} + \frac{TN}{TN + FP} \right)$
+\i F1 score (ignores usually large true negatives): $2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$ 
+\ei
+
 \subsection{Gradient descent}
 Alternative to least squares regression. Algorithm:
 \be
@@ -502,16 +523,16 @@ p(w_i \mid x) = \frac{\text{frequency of $w_i$} +1 }{\text{words in $x$} + \text
 \i Output: Random decision trees $T_1, T_2, \ldots, T_B$
 \ei
 
-\subsection{Generative Models}
+\section{Generative Models}
 
 \bi
 \i Discrimative: Learn $p(y \mid x)$
 \i Generative: Learn $p(y \mid x) \cdot p(x) = p(x, y)$ joint probability
 \ei
 
-\subsubsection{Discriminant Analysis}
+\subsection{Discriminant Analysis}
 
-\subsubsection{Gaussian Discriminant Analysis}
+\subsection{Gaussian Discriminant Analysis}
 
 \bi
 \i generate new data, also for classification
@@ -522,14 +543,18 @@ p(w_i \mid x) = \frac{\text{frequency of $w_i$} +1 }{\text{words in $x$} + \text
 \i this becomes $x^T \Sigma x + v^Tx + t=0$
 \i Boundary is quadratic
 \i number of parameters to be estimated: $2 \frac{d(d+1)}{2} + 2d$
-(much higher than for discriminative models)
 \ei
 
-\subsubsection{Linear Discriminant Analysis}
+\subsection{Linear Discriminant Analysis}
 
 \bi
+\i LSR with $y \in \{-1, +1\}\}$: $\min_w \norm{Xw-y}_2^2$
+\i numbers to be estimated: $d+1$
+\i For generation:
+\bi
 \i Assume $\Sigma = \Sigma_{-1} = \Sigma_{+1}$ for all classes
-\i number of parameters to be estimated: $\frac{d(d+1)}{2} + 2d$
+\i number of parameters to be estimated: $\frac{d(d+1)}{2} + 2d$ (much higher than for discriminative models)
+\ei
 \ei
 
 \section{Supervised learning}
@@ -552,9 +577,197 @@ p(w_i \mid x) = \frac{\text{frequency of $w_i$} +1 }{\text{words in $x$} + \text
 \i non-convex min. problem
 \ei
 
-%\[
-%\begin{array}{ll}
-%\min_w \frac{1}{2} \norm{Xw-y}_2^2 + \lambda \norm{w}_2^2 & \text{Ridge regression}\\\\
-%\min_w \frac{1}{2} \norm{Xw-y}_2^2 + \lambda \norm{w}_1 & \text{Lasso regression}
-%\end{array}
-%\]
+\subsubsection{LLoyds algorithm}
+
+\be
+\i Input: data points $x^{(1)}, \ldots, x^{(n)} \in \RS^d$, number $k$ of clusters
+\i randomly init centers $\mu^{(0)}_1,\ldots,\mu^{(0)}_k$
+\i while not converged:
+\be
+\i assign each data point to closest center $C^{(i+1)}_1, \ldots, C^{(i+1)}_k$ with \[
+x^{(s)} \in C^{(i+1)}_j \Leftrightarrow \norm{x^{(s)} - \mu_j^{(i)}}^2 \leq \norm{x^{(s) - \mu_l^{i}}}^2, l = 1, \ldots, k
+\] ($x^{(s)}$ is assigned to cluster $C^{(i+1)}_j$ if it is closest to $\mu_j$)
+\i compute new cluster centers \[
+\mu_j^{(i+1)} = \frac{1}{\vert C^{(i+1)}_j \vert} \dsum_{x^{(s)} \in C^{(i+1)}_j} x^{(s)}
+\]
+\ee
+\i Output: $C_1, \ldots, C_k$
+\ee
+
+This algorithm can be stuck in local optimum. Finding global optimum is NP-hard.
+
+\subsubsection{Alternatives}
+
+\bi
+\i k-median. $\norm{\cdot}_2^2$ instead of $\norm{\cdot}_2$
+\bi
+\i more robust to outliers
+\ei
+\i weighted k-means: weights for individual data-points
+\i soft k-means: no hard assignments, but probabilities
+\ei
+
+\subsection{Principal Component Analysis (PCA)}
+
+\bi
+\i Dimensionality reduction technique
+\i identify patterns and relationsships in high-D data
+\i many approaches, e.g.:
+\bi
+\i Maximize variance of projected data $\to$ covariance matrix
+\i Minimize squared error $\to$ SVD
+\ei
+\ei
+
+\subsubsection{Maximize Variance}
+
+\be
+\i Input: Data points $x^{(1)}, \ldots, x^{(n)} \in \RS^d$, parameter $l < d$ for reduced dimension
+\i Output: Projection $\pi_S$ on affine subspace $S$ so variance of projected points is maximized: \[
+\max_S \Var_l(\pi_S(X))
+\]
+\i Assume data is centered: $\bar x = \frac{1}{n} \dsumni x^{(i)} = 0$ or center by $\tilde x^{(i)} = x^{(i)} - \bar x$
+\i Compute Covariance Matrix:
+\bi
+\i For one-dimensional case $l=1$:
+\begin{align*}
+&
+\begin{array}{cl}
+\max_{a \in \RS^d} & \Var(\pi_a(X)) \\
+\st & \norm{a} = 1
+\end{array} \\
+\Rightarrow&
+\begin{array}{cl}
+\max_{a \in \RS^d} & \sum_{i=1}^n (\pi_a(x^{(i)}))^2\\
+\st & \norm{a} = 1
+\end{array} \\
+\Rightarrow&
+\begin{array}{cl}
+\max_{a \in \RS^d} & \sum_{i=1}^n (a^Tx^{(i)})^2\\
+\st & \norm{a} = 1
+\end{array} \\
+\Rightarrow&
+\begin{array}{cl}
+\max_{a \in \RS^d} & \norm{Xa}^2\\
+\st & \norm{a} = 1
+\end{array} \\
+\Rightarrow&
+\begin{array}{cl}
+\max_{a \in \RS^d} & a^T(X^TX)a\\
+\st & \norm{a}^2 = 1
+\end{array} \\
+\end{align*}
+\i Solution is eigenvector $v$ to largest eigenvalue $\lambda_{max}$ of covariance matrix $X^TX$
+\i for bigger projected dimensions $l > 1$ project data on space spanned by eigenvectors of the $l$ largest eigenvalues of $C = X^TX$
+\ei
+\i Compute Eigendecomposition $C = V \Lambda V^T$
+\i Define $V_l$ as the matrix containing the $l$ largest eigenvectors, i.e. first $l$ columns of $V$ if eigenvalzes in $\Lambda$ are decreasing order
+\i Compute new data points 
+\bi
+\i $y^{(i)} = V_l^T \tilde x^{(i)} \in \RS^l$ is the projection of $x^{(i)}$ on $l$-dimensional subspace
+\bi
+\i distance between point and projection is reconstruction error
+\i Reconstruction error bound by $\dsum_{k=l+1}^d \lambda_k$
+\ei
+\i $z^{(i)} = P \tilde x^{(i)} + \bar x \in \RS^d$ with $P = V_l V_l^T$ to map points back to original $d$-dimensional space (they only span $l$-dimensional affine space now)
+\ei
+\ee
+
+\subsubsection{Kernel PCA}
+
+\bi
+\i With $x^{(i)},\ldots,x^{(n)}$ stacked in data matrix X as rows
+\i Covariance matrix is $C=X^TX \in \RS^{d\times d}$ with $d$ eigenvalues
+\i Kernel matrix is $K = XX^T \in \RS^{n\times n}$ with $n$ eigenvalues
+\i Express eigenvalues/eigenvectors of C by those of K and vice versa
+\ei
+
+\subsection{Low-dimensional Embedding}
+
+\bi
+\i Given distance matrix $D \in \RS^{n \times n}$ containing $d_{ij} = \norm{x_i-x_j}$ between data points
+\i Recover $(x^{(i)})_{i=1,\ldots,n} \in \RS^d$
+\i find $\phi: X \to \RS^d$ for $\norm{\phi(x^{(i)}) - \phi(x^{(j)})} = d_{ij}$
+\i if $D$ from points in $\RS^d$, $D$ is Euclidean distance matrix (perfect $\phi$ computable)
+\ei
+
+\subsubsection{Multidimensional Scaling (MDS)}
+
+\bi
+\i Given distance matrix $D$, find $x^{(i)}$ that best-match $D$
+\i Classic MDS: Minimize error wrt pairwise scalar product
+\i Metric MDS: Minimize error wrt distance matrix $D$
+\i Non-metric MDS: $D$ is not a distance matrix but has ordering $\to$ preserve ordering
+\i non-convex, NP-hard
+\ei
+
+\subsubsubsection{Classic MDS}
+\be
+\i The problem is: \begin{align*}
+&\min_{x^{(1)}, \ldots, x^{(n)}} \dsum_{i,j} (d_{i,j} - (x^{(i)})^Tx^{(j)})^2 \\
+\Rightarrow & \min_{X \in \RS^{n \times d}} \norm{S-XX^T}^2_{Fro} 
+\end{align*}
+\i Compute matrix $S = \frac{1}{2} (d^2_{1,i} + d^2_{1,j} + d^2_{i,j})$
+\i Compute eigenvalue decomposition $S = V \Lambda V^T$
+\i $V_d$ is matrix containing $d$ largest eigenvectors of $S$
+\i $\Lambda_d$ is is $d \times d$ diagonal matrix with first $d$ eigenvalues on diagonal
+\i $X = V_d \sqrt{\Lambda_d}$
+\i row $i$ of $X$ is coordinates of embedded point $x^{(i)}$
+\ee
+
+Note: If data points are in $\RS^d$, $S$ has rank $d$, and $d$ eigenvalues $>0$ and $n-d$ eigenvalues $=0$. Spectrum of $S$ provides information on $d$.
+
+\subsubsubsection{(Non-)Metric MDS}
+
+\bi
+\i Metric MDS: \[\min_{x^{(1)}, \ldots, x^{(n)}} \dsum_{i,j} ( \norm{x^{(i)} - x^{(j)}} - d_{i,j})^2 \]
+\i Non-Metric MDS: Distance matrix consists of $d_{i,j} > d_{i,k}$: \[\min_{x^{(1)}, \ldots, x^{(n)}} \dsum_{i,j} ( f(\norm{x^{(i)} - x^{(j)}}) - d_{i,j})^2\]
+\ei
+
+\subsection{Isomap}
+
+\bi
+\i Detect lower-dimensional structures in data
+\i Keep local distances of points
+\i Compute geodesic distances for large distances with k-nearest neighbor graph, shortest path distances approximate geodesic distances
+\i Store distances in distance matrix $D$
+\i Metric MDS on $D$ (preserves geodesic distances)
+\ei
+
+\subsection{Recommender Systems}
+
+\bi
+\i Fill out missing values in data matrix
+\i For $U,V$, we can compute whole rating matrix $M = U \cdot V^T$
+\i Sparse matrix $R$ that matches predictions
+\i Goal: Find $U, V$ that predicition matches input ratings \begin{align*}
+& \min_{U \in \RS^{m \times k}, V \in \RS^{n \times k}} \dsum_{(i,j) \in \Omega} (r_{i,j} - (u^{(i)})^T v^{(j)})^2 \\
+= & \min_{U \in \RS^{m \times k}, V \in \RS^{n \times k}} \norm{R - UV^T}^2_{\Omega} \qquad \text{where } \qquad \norm{A}_\Omega^2 = \dsum_{(i,j) \in \Omega} a_{i,j}^2\\
+= & \min_{U \in \RS^{m \times k}, V \in \RS^{n \times k}} \norm{R - UV^T}^2_{Fro}
+\end{align*}
+\i Non-convex, NP-hard
+\i Gradient descent or alternating least squares (fix $U$ or $V$ and optimize the other, then switch)
+\ei
+
+\subsection{Topic Modelling}
+
+\bi
+\i Word frequency transformation
+\i rare and frequent words discarded
+\i $w_{i,j}$ means how often word $j$ appears in document $i$
+\i Term Frequency $\text{TF} = \frac{w_{i,j}}{\text{length of document i}}$
+\i Inverse Document Frequency $\text{IDF} = \log \frac{N}{\text{number of documents containing word j}}$
+\i smoothed IDF: $\text{IDF} = \log \frac{N+1}{\text{number of documents containing word j} + 1} + 1$
+\i TF-IDF: $\text{TF-IDF} = \text{TF} \cdot \text{IDF}$
+\i in Matrix $W$ store TF-IDF values
+\i Kullback-Leibler divergence computation on $W$ to find topics
+\i Gets feature vectors for words, can assign topics to words and documents
+\ei
+
+\subsection{Matrix Factorization}
+
+\bi
+\i Useful for images
+\i Uncovers latent factors (topics)
+\i Imputes data
+\ei
