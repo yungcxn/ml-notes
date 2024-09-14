@@ -9,11 +9,32 @@ ML: Tries to automate the process of \bx{inductive inference}.
 
 \subsection{Math}
 
-\TODO{norms}
-\TODO{determinant, trace, inverse}
-\TODO{semidefinite, definite, indefinite}
-\TODO{linear eq}
-\TODO{inverse proof}
+\subsubsection{Common Norms}
+
+\bi
+\i $\norm{x}_0$ \quad\qquad\qquad\qquad number of non-zero elements
+\i $\norm{x}_1 = \dsum_{i=1}^d \left|x_i\right|$\qquad\qquad Sum of absolutes
+\i $\norm{x}_2 = \sqrt{\dsum_{i=1}^d x_i^2}$ \qquad \quad Euclidean distance
+\i $\norm{x}^2_2 = \dsum_{i=1}^d x_i^2$ \qquad\qquad Sum of squares
+\i $\norm{x}_\infty = \displaystyle\max_{i = 1,...,n} \left|x_i\right|$ \qquad Maximum absolute value
+\ei
+
+\subsubsection{determinant, trace, inverse}
+
+\bi
+\i $\det(A) = \left|A\right| = \left| \begin{array}{cc} a & b\\c & d \end{array}\right| = ad-bc$
+\i $\tr(A) = \dsum_{i=1}^n a_{ii}$
+\i $A^{-1} = \frac{1}{\det(A)} \left(\begin{array}{cc} d & -b\\-c & a \end{array}\right)$
+\ei
+
+\subsubsection{Transpose rules}
+
+\bi
+\i $(A^T)^T = A$
+\i $(A+B)^T = A^T + B^T$
+\i $(AB)^T = B^T A^T$
+\i $(A^{-1})^T = (A^T)^{-1}$
+\ei
 
 \subsubsection{Eigenvalues and Eigenvectors}
 
@@ -50,15 +71,16 @@ L(w): \RS \to \RS^m
 }, \qquad x = \vct{x_1\\\vdots\\x_d} \in \RS^d
 \end{align*}
 
-\subsubsection{Bonus}
+%\subsubsection{Bonus}
 
-Convex hull $\conv(V)$ for set of vectors $V$ is smallest convex set containing $V$.
-\[ \conv(V) = \left\{\dsum^m_{i=1} \lambda_i \cdot v_i \mid \lambda_i \geq 0, \dsum^m_{i=1} \lambda_i = 1\right\} \]
+%Convex hull $\conv(V)$ for set of vectors $V$ is smallest convex set containing $V$.
+%\[ \conv(V) = \left\{\dsum^m_{i=1} \lambda_i \cdot v_i \mid \lambda_i \geq 0, \dsum^m_{i=1} \lambda_i = 1\right\} \]
 
 \npsection{Supervised learning}
 
 \bi
 \i input $X$, output $Y$
+\i $x^{(i)} = (x^{(i)}_1, x^{(i)}_2, \ldots, x^{(i)}_d) \in \RS^d$ 
 \i training data: $(x^{(i)}, y^{(i)})_{i=1..n} \subset X \times Y$
 \i Goal: learn $f: X \to Y$ for model class $F$ on examples
 \ei
@@ -529,8 +551,6 @@ p(w_i \mid x) = \frac{\text{frequency of $w_i$} +1 }{\text{words in $x$} + \text
 \i Discrimative: Learn $p(y \mid x)$
 \i Generative: Learn $p(y \mid x) \cdot p(x) = p(x, y)$ joint probability
 \ei
-
-\subsection{Discriminant Analysis}
 
 \subsection{Gaussian Discriminant Analysis}
 

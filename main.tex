@@ -10,6 +10,7 @@
 \usepackage{amsmath}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\tr}{tr}
 \newcommand{\Var}{\text{Var}}
 \newcommand{\st}{\text{st}}
 \usepackage{amssymb}
@@ -17,7 +18,19 @@
 \usepackage{booktabs}
 \usepackage{color}
 \usepackage{fancybox}
-\usepackage{fancyhdr}						
+\usepackage{fancyhdr}		
+\makeatletter
+\ExplSyntaxOn
+\ifdefined\f@nch@resetpar\else
+\renewcommand\f@nch@everypar{%
+  \tex_everypar:D{}
+  \cs_set_eq:NN \par     \tex_par:D
+  \cs_set_eq:NN \@@par   \tex_par:D
+  \cs_set_eq:NN \endgraf \tex_par:D
+}\fi
+\ExplSyntaxOff
+\makeatother
+				
 \usepackage[outer=3.15cm]{geometry}
 \geometry{a4paper,body={5.8in,9in}}
 \usepackage{titling} % Add this line
@@ -32,6 +45,7 @@
 \usepackage{url,xspace,boxedminipage}
 \usepackage{titlesec}
 \usepackage{titling}
+\usepackage{hyperref}
 \setlength{\droptitle}{-3cm} 
 \newcommand{\npsection}{\clearpage\section}
 
